@@ -70,7 +70,7 @@ function quizStart() {
         // displays the time
         timer =  setInterval(function(){
         timeCounter.textContent = gameTime + ' seconds remaining';
-        
+        console.log(timeCounter)
         // Removes timer when time runs out
         if (gameTime <= 0){
             
@@ -95,12 +95,12 @@ function showResult(result){
     // results.textContent = result;
     // resultEl.appendChild(results);
     addElement('p',resultEl,result);
-    resultEl.setAttribute('class','display-result');
+    // resultEl.setAttribute('class','display-result');
     setTimeout(function(){
         removeElement(resultEl)
         // resultEl.removeChild(resultEl.firstElementChild);
-        resultEl.removeAttribute('class');
-        resultEl.setAttribute('class','result');
+        // resultEl.removeAttribute('class');
+        // resultEl.setAttribute('class','result');
     },750);
 }
 
@@ -120,10 +120,11 @@ function showHighScore() {
     clearQuizBoard()
     if (highScores.length){
         for (let i=0;i<highScores.length;i++){
-            let scoreEl = document.createElement('p');
-            scoreEl.setAttribute('class','score')
-            scoreEl.textContent = highScores[i].name + ':' + highScores[i].score
-            scoreContainerEl.appendChild(scoreEl);
+            addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
+            // let scoreEl = document.createElement('p');
+            // scoreEl.setAttribute('class','score')
+            // scoreEl.textContent = highScores[i].name + ':' + highScores[i].score
+            // scoreContainerEl.appendChild(scoreEl);
             }
     }
     else {
@@ -163,25 +164,33 @@ function winGame() {
     
     footerEl.appendChild(input)
     addElement('button',footerEl,'Submit',saveGame)
+    
+    console.log(timer)
+    clearInterval(timer)
+    timer=null;
+    console.log(timer)
     // footerEl.appendChild(submitBtn)
     
 }
 
-function checkAnswer(answer){
+function checkAnswer(){
+    console.log(this.textContent)
     let result;
-    if(answer === questionPool[questionIndex][5]){
+    if(this.textContent === questionPool[questionIndex][5]){
         result = 'Correct';
         correctAnswers++;
     }else{
         result = 'WRONG!';
         if (gameTime <= 15){
             gameTime = 0;
+            endGame()
+            return
         }else{
             gameTime-=15;
         }
         timeCounter.textContent = gameTime + ' seconds remaining';
     }
-    console.log(result,answer,questionPool[questionIndex][5])
+    // console.log(result,answer,questionPool[questionIndex][5])
     showResult(result)
     questionIndex++;
     if (questionIndex<questionPool.length){
@@ -197,11 +206,11 @@ function checkAnswer(answer){
 }
 
 function updateQuizBoard(){
-    const listEl = document.querySelectorAll('.answer');
+    const listEl = document.querySelectorAll('li');
 
     for (let i=0;i<4;i++){
         listEl[i].textContent = questionPool[questionIndex][i+1]
-        listEl[i].setAttribute('id',questionPool[questionIndex][i+1])
+        // listEl[i].setAttribute('id',questionPool[questionIndex][i+1])
     }
 }
 
@@ -231,16 +240,17 @@ function makeQuizBoard() {
     
     for (let i=0;i<4;i++){
         // let listBtn = document.createElement('button')
-        let listEl = document.createElement('li')
-        listEl.setAttribute('class','answer')
+        addElement('li',mainList,questionPool[questionIndex][i+1],checkAnswer)
+        // let listEl = document.createElement('li')
+        // listEl.setAttribute('class','answer')
         // console.log(listEl)
         // listBtn.textContent = questionPool[questionIndex][i+1]
         // listEl.setAttribute('id',questionPool[questionIndex][i+1])
-        listEl.addEventListener('click',function(event){
-            checkAnswer(event.target.textContent)
-        })
+        // listEl.addEventListener('click',function(event){
+        //     checkAnswer(event.target.textContent)
+        // })
         
-        mainList.appendChild(listEl)
+        // mainList.appendChild(listEl)
     }
     
     
@@ -284,15 +294,17 @@ function mainPage() {
     // }
     clearQuizBoard()
     
-    let startBtn = document.createElement('button');
-    startBtn.textContent = 'Start Quiz';
-    startBtn.setAttribute('class', 'start-button');
-    startBtn.onclick = makeQuizBoard;
-    footerEl.appendChild(startBtn);
-    let mainText = document.createElement('p')
-    mainText.setAttribute('class','info')
-    mainText.textContent = 'akjbdkjfbdskjfbkjsdbfjksdbfkjbsdjkfbsdjkfbjksdbfjksbdfjkbsj';
-    mainEl.appendChild(mainText)
+    // let startBtn = document.createElement('button');
+    // startBtn.textContent = 'Start Quiz';
+    // startBtn.setAttribute('class', 'start-button');
+    // startBtn.onclick = makeQuizBoard;
+    // footerEl.appendChild(startBtn);
+    addElement('button',footerEl,'Start Quiz',makeQuizBoard)
+    // let mainText = document.createElement('p')
+    // mainText.setAttribute('class','info')
+    // mainText.textContent = 'akjbdkjfbdskjfbkjsdbfjksdbfkjbsdjkfbsdjkfbjksdbfjksbdfjkbsj';
+    // mainEl.appendChild(mainText)
+    addElement('p',mainEl,'dsfdfsdfsdfsdfsdfsdfsdf')
     titleEl.textContent = 'Code Quiz Challenge';    
     timeCounter.textContent = '';
     loadScores()
