@@ -8,6 +8,7 @@ const mainList = document.querySelector('ol');
 const timeCounter = document.querySelector('.timer');
 const resultEl = document.querySelector('.result');
 const highScoreEl = document.querySelector('.high-score');
+const scoreContainerEl = document.querySelector('.score-container');
 
 let correctAnswers = 0;
 // const testButton = document.querySelector('.test');
@@ -20,19 +21,40 @@ let highScores = [];
 let gameTime = 100;
 let timer;
 
-function makeBackButton() {
-    let backBtn = document.createElement('button');
-    backBtn.textContent = 'Go Back';
-    backBtn.onclick = mainPage;
-    footerEl.appendChild(backBtn);
+function addElement(child,parent,text,callBack=null) {
+    // let parentEl = document.querySelector(parent);
+    let childEl = document.createElement(child);
+    childEl.textContent = text;
+    if (callBack){
+        childEl.onclick = callBack;
+    }
+    parent.appendChild(childEl)
 }
+
+function removeElement(parent) {
+    console.log(parent)
+    let numberOfChildren = parent.childElementCount;
+    for (let i=0;i<numberOfChildren;i++){
+        parent.removeChild(parent.firstElementChild)
+    }
+    
+}
+
+// function makeBackButton() {
+//     addElement('button',footerEl,'Go Back',mainPage)
+    // let backBtn = document.createElement('button');
+    // backBtn.textContent = 'Go Back';
+    // backBtn.onclick = mainPage;
+    // footerEl.appendChild(backBtn);
+// }
 
 function endGame() {
     clearQuizBoard()
-    let endMessage = document.createElement('p')
-    endMessage.textContent = "You lose, better luck next time"
-    mainEl.appendChild(endMessage)
-
+    addElement('p',mainEl,'You lose, better luck next time')
+    // let endMessage = document.createElement('p')
+    // endMessage.textContent = "You lose, better luck next time"
+    // mainEl.appendChild(endMessage)
+    addElement('button',footerEl,'Go Back',mainPage)
 }
 
 function quizStart() {
@@ -69,29 +91,50 @@ const questionPool = [['q1','a2','a3','a4','a5','a2'],
                     ['q5','aq2','aw3','ae4','ra5','ra5']]
 
 function showResult(result){
-    let results = document.createElement('p');
-    results.textContent = result;
-    resultEl.appendChild(results);
+    // let results = document.createElement('p');
+    // results.textContent = result;
+    // resultEl.appendChild(results);
+    addElement('p',resultEl,result);
     resultEl.setAttribute('class','display-result');
     setTimeout(function(){
-        resultEl.removeChild(resultEl.firstElementChild);
+        removeElement(resultEl)
+        // resultEl.removeChild(resultEl.firstElementChild);
         resultEl.removeAttribute('class');
         resultEl.setAttribute('class','result');
     },750);
 }
 
-function showHighScore() {
+function clearScores() {
+    // for (let i=0;i<highScores.length;i++){
+    //     removeElement(scoreContainerEl
     clearQuizBoard()
-    for (let i=0;i<highScores.length;i++){
-        let scoreEl = document.createElement('p');
-        scoreEl.setAttribute('class','score')
-        scoreEl.textContent = highScores[i].name + ':' + highScores[i].score
-        mainEl.appendChild(scoreEl);
-        }
-    makeBackButton()
+    highScores = [];
+    localStorage.setItem('highScores',JSON.stringify(highScores))
+    showHighScore()
 }
 
-function saveGame(name) {
+function showHighScore() {
+    // removeElement(footerEl)
+    
+    // removeElement(mainEl)
+    clearQuizBoard()
+    if (highScores.length){
+        for (let i=0;i<highScores.length;i++){
+            let scoreEl = document.createElement('p');
+            scoreEl.setAttribute('class','score')
+            scoreEl.textContent = highScores[i].name + ':' + highScores[i].score
+            scoreContainerEl.appendChild(scoreEl);
+            }
+    }
+    else {
+        addElement('p',scoreContainerEl,'No scores to display')
+    }
+    addElement('button',footerEl,'Go Back',mainPage)
+    addElement('button',footerEl,'Clear High Score',clearScores)
+}
+
+function saveGame() {
+    let name = document.querySelector('input').value
     let newScore = {name:name,score:gameTime}
     highScores.push(newScore)
     highScores.sort(function (a,b){
@@ -101,19 +144,27 @@ function saveGame(name) {
     showHighScore()
 }
 
+function loadScores() {
+    highScores = JSON.parse(localStorage.getItem('highScores'))
+}
+
 function winGame() {
-    let endMessage = document.createElement('p')
-    endMessage.textContent = 'You WON!!!! You completed the quiz with ' + gameTime + ' seconds remaining';
-    mainEl.appendChild(endMessage)
+    // let endMessage = document.createElement('p')
+    // endMessage.textContent = 'You WON!!!! You completed the quiz with ' + gameTime + ' seconds remaining';
+    // mainEl.appendChild(endMessage)
+    addElement('p',mainEl,'You WON!!!! You completed the quiz with ' + gameTime + ' seconds remaining')
     let input = document.createElement('input');
     input.setAttribute('placeholder','Enter your name')
-    let submitBtn = document.createElement('button');
-    submitBtn.textContent = 'Submit';
-    submitBtn.addEventListener('click',function(event){
-        saveGame(event.target.parentElement.firstChild.nextElementSibling.value)
-    })
+    // let submitBtn = document.createElement('button');
+    // submitBtn.textContent = 'Submit';
+    // submitBtn.addEventListener('click',function(event){
+    //     saveGame(event)
+    // })
+    
     footerEl.appendChild(input)
-    footerEl.appendChild(submitBtn)
+    addElement('button',footerEl,'Submit',saveGame)
+    // footerEl.appendChild(submitBtn)
+    
 }
 
 function checkAnswer(answer){
@@ -128,6 +179,7 @@ function checkAnswer(answer){
         }else{
             gameTime-=15;
         }
+        timeCounter.textContent = gameTime + ' seconds remaining';
     }
     console.log(result,answer,questionPool[questionIndex][5])
     showResult(result)
@@ -154,18 +206,25 @@ function updateQuizBoard(){
 }
 
 function clearQuizBoard(){
-    if (mainList.firstChild){
-        for (let i=0;i<4;i++){
-            mainList.removeChild(mainList.firstChild)
-        }
-    }
+    removeElement(mainList)
+    removeElement(mainEl)
+    removeElement(footerEl)
+    removeElement(scoreContainerEl)
+    // if (mainList.firstChild){
+    //     for (let i=0;i<4;i++){
+    //         removeElement(mainList)
+    //     }
+    // }
     questionIndex=0;
 
 }
 
 function makeQuizBoard() {
-    mainEl.removeChild(mainEl.firstElementChild);
-    footerEl.removeChild(footerEl.firstElementChild);
+    // removeElement(mainEl);
+    // removeElement(footerEl);
+    clearQuizBoard()
+
+
     // const mainList = document.createElement('ul')
     // mainList.setAttribute('id','list')
     // console.log(mainList)
@@ -213,14 +272,17 @@ function getQuestions () {
 }
 
 function mainPage() {
-    if (footerEl.firstElementChild){
-        footerEl.removeChild(footerEl.firstElementChild);
-    }
-    for (let i=0;i<highScores.length;i++){
-        if (mainEl.firstElementChild){
-            mainEl.removeChild(mainEl.firstElementChild)
-        }
-    }
+    
+    //     removeElement(footerEl)
+    //     removeElement(scoreContainerEl)
+        
+    // removeElement(mainEl)
+    // for (let i=0;i<highScores.length;i++){
+        
+    //         removeElement(scoreContainerEl)
+        
+    // }
+    clearQuizBoard()
     
     let startBtn = document.createElement('button');
     startBtn.textContent = 'Start Quiz';
@@ -233,7 +295,7 @@ function mainPage() {
     mainEl.appendChild(mainText)
     titleEl.textContent = 'Code Quiz Challenge';    
     timeCounter.textContent = '';
-    highScores = JSON.parse(localStorage.getItem('highScores'))
+    loadScores()
 }
 
 highScoreEl.onclick = showHighScore;
