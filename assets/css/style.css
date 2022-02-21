@@ -22,10 +22,14 @@
     cursor: pointer;
     transform:scale(1.05);
 }
+
+h1{
+    font-size: 2rem;
+}
 .main-board{
     margin:auto;
-    padding:2rem;
-    width:30vw;
+    padding:2rem 4rem;
+    width:50vw;
     text-align: center;
 }
 
@@ -34,10 +38,14 @@
     margin:1rem auto;
     border-radius: 2rem;
     padding:0.5rem;
-    width:20vw;
+    width:50vw;
     min-width: fit-content;
     text-align: center;
 
+}
+
+.answer-container{
+    margin:auto;
 }
 
 button,li{
@@ -62,6 +70,22 @@ li{
 .result>p{
     margin-top:1rem;
     height: 10rem;
-    
-    border-top:1px solid gray;
+    color:rgb(153, 153, 153);
+    font-style: italic;
+    border-top:1px solid rgb(153, 153, 153);
+}
+
+input{
+    width:100%;
+    max-width: 400px;
+}
+
+@media screen and (max-width:500px) {
+    .main-board{
+        width: 100%;
+    }
+    ::placeholder{
+        font-size: 0.8rem;
+    }
+
 }
