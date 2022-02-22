@@ -26,11 +26,17 @@
 h1{
     font-size: 2rem;
 }
+
 .main-board{
     margin:auto;
-    padding:2rem 4rem;
-    width:50vw;
+    /* padding:0rem; */
+    width:400px;
     text-align: center;
+}
+
+
+.mainboard h2,.main-board p,.main-board h3{
+    margin:2rem;
 }
 
 .score-container>p{
@@ -38,8 +44,8 @@ h1{
     margin:1rem auto;
     border-radius: 2rem;
     padding:0.5rem;
-    width:50vw;
-    min-width: fit-content;
+    width: fit-content;
+    min-width: 200px;
     text-align: center;
 
 }
@@ -69,7 +75,6 @@ li{
 
 .result>p{
     margin-top:1rem;
-    height: 10rem;
     color:rgb(153, 153, 153);
     font-style: italic;
     border-top:1px solid rgb(153, 153, 153);
@@ -83,6 +88,7 @@ input{
 @media screen and (max-width:500px) {
     .main-board{
         width: 100%;
+        padding:0rem 1rem;
     }
     ::placeholder{
         font-size: 0.8rem;

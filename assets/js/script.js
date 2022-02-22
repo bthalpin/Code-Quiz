@@ -2,16 +2,18 @@ const cardEl = document.querySelector('.main-board');
 const titleEl = document.querySelector('.title-container');
 const mainEl = document.querySelector('.main-container'); 
 const footerEl = document.querySelector('.footer'); 
-const mainList = document.querySelector('ol');
+// const mainList = document.querySelector('ol');
 const timeCounter = document.querySelector('.timer');
 const resultEl = document.querySelector('.result');
 const highScoreEl = document.querySelector('.high-score');
 const scoreContainerEl = document.querySelector('.score-container');
+let mainList;
 
 let correctAnswers = 0;
 let highScores = [];
 let gameTime;
 let timer;
+let resultTimer;
 let currentQuestionAndAnswer;
 
 // Pool of questions
@@ -39,7 +41,6 @@ function addElement(child,parent,text,callBackFunction=null) {
 
 // Removes all the elements of the parent element
 function removeElement(parent) {
-    console.log(parent)
     let numberOfChildren = parent.childElementCount;
     for (let i=0;i<numberOfChildren;i++){
         parent.removeChild(parent.firstElementChild)
@@ -54,8 +55,8 @@ function winGame() {
     let input = document.createElement('input');
     input.setAttribute('placeholder','Enter your name (max 30 characters)')
     input.setAttribute('maxlength','30');
-    footerEl.appendChild(input)
-    addElement('button',footerEl,'Submit',saveScores)
+    mainEl.appendChild(input)
+    addElement('button',mainEl,'Submit',saveScores)
     clearInterval(timer)
     timer=null;    
 }
@@ -65,7 +66,7 @@ function endGame() {
     clearQuizBoard()
     addElement('h2',titleEl,'You lost')
     addElement('p',mainEl,'Keep studying and try again')
-    addElement('button',footerEl,'Go Back',showMainPage)
+    addElement('button',mainEl,'Go Back',showMainPage)
 }
 
 
@@ -81,7 +82,6 @@ function clearScores() {
 // Displays the high scores on the screen if there are any
 function showHighScore() {
     clearQuizBoard()
-    console.log(highScores)
     if (!highScores || !highScores.length){
         addElement('p',scoreContainerEl,'No scores to display')
         
@@ -91,8 +91,8 @@ else {
         addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
         }
     }
-    addElement('button',footerEl,'Go Back',showMainPage)
-    addElement('button',footerEl,'Clear High Score',clearScores)
+    addElement('button',mainEl,'Go Back',showMainPage)
+    addElement('button',mainEl,'Clear High Score',clearScores)
 }
 
 // Loads the high scores from local storage
@@ -114,9 +114,17 @@ function saveScores() {
 
 // Displays if the answer selected was right or wrong at the bottom for 1 second when an answer is selected
 function showResult(result){
-    addElement('p',resultEl,result);
-    setTimeout(function(){
+    if (resultTimer){
+        clearTimeout(resultTimer)
+        resultEl.firstElementChild.textContent = result;
+    }
+    else {
+        addElement('p',resultEl,result);
+    }
+
+    resultTimer = setTimeout(function(){
         removeElement(resultEl)
+        resultTimer=null
     },1000);
 }
 
@@ -131,6 +139,7 @@ function checkAnswer(){
         result = 'WRONG!';
         if (gameTime <= 15){
             gameTime = 0;
+            showResult(result)
             endGame()
             return
         }else{
@@ -140,6 +149,7 @@ function checkAnswer(){
     }
     showResult(result)
     questionIndex++;
+    // console.log(gameTime,'inside answer' )
 
     // Will update quiz board if there are questions left or end game if that was the last question
     // if (questionIndex<questionPool.length){  
@@ -170,10 +180,13 @@ function updateQuizBoard(){
 // Clears the page of all elements
 function clearQuizBoard(){
     removeElement(titleEl)
-    removeElement(mainList)
+    // removeElement(mainList)
     removeElement(mainEl)
-    removeElement(footerEl)
+    // removeElement(footerEl)
     removeElement(scoreContainerEl)
+    // if (resultTimer){
+    //     clearTimeout(resultTimer)
+    // }
     questionIndex=0;
 }
 
@@ -184,7 +197,7 @@ function quizStart() {
     
     timer =  setInterval(function(){
         timeCounter.textContent = 'Time: ' + gameTime;
-        console.log(timeCounter)
+        // console.log(gameTime)
         // Removes timer when time runs out
         if (gameTime <= 0){
             
@@ -200,6 +213,8 @@ function quizStart() {
 function makeQuizBoard() {
     clearQuizBoard()
     addElement('h3',mainEl,'')
+    addElement('ol',mainEl,'')
+    mainList = document.querySelector('ol')
     for (let i=0;i<4;i++){
         addElement('li',mainList,'',checkAnswer)
     }    
@@ -210,12 +225,11 @@ function makeQuizBoard() {
 // Clears the page and displays the main page information
 function showMainPage() {
     clearQuizBoard()
-    addElement('h1',titleEl,'Code Quiz Challenge')
+    addElement('h1',mainEl,'Code Quiz Challenge')
     addElement('p',mainEl,'dsfdfsdfsdfsdfsdfsdfsdf')
-    addElement('button',footerEl,'Start Quiz',makeQuizBoard)
+    addElement('button',mainEl,'Start Quiz',makeQuizBoard)
     currentQuestionPool = [...questionPool]
     timeCounter.textContent = '';
-    console.log(questionPool)
 }
 
 // Makes high score link, loads the scores from local storage, and calls function to display main page
