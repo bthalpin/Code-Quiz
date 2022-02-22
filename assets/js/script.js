@@ -81,13 +81,15 @@ function clearScores() {
 // Displays the high scores on the screen if there are any
 function showHighScore() {
     clearQuizBoard()
-    if (highScores.length){
-        for (let i=0;i<highScores.length;i++){
-            addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
-            }
-    }
-    else {
+    console.log(highScores)
+    if (!highScores || !highScores.length){
         addElement('p',scoreContainerEl,'No scores to display')
+        
+}
+else {
+    for (let i=0;i<highScores.length;i++){
+        addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
+        }
     }
     addElement('button',footerEl,'Go Back',showMainPage)
     addElement('button',footerEl,'Clear High Score',clearScores)
