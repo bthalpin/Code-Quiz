@@ -1,8 +1,5 @@
-const cardEl = document.querySelector('.main-board');
 const titleEl = document.querySelector('.title-container');
 const mainEl = document.querySelector('.main-container'); 
-const footerEl = document.querySelector('.footer'); 
-// const mainList = document.querySelector('ol');
 const timeCounter = document.querySelector('.timer');
 const resultEl = document.querySelector('.result');
 const highScoreEl = document.querySelector('.high-score');
@@ -85,10 +82,10 @@ function showHighScore() {
     if (!highScores || !highScores.length){
         addElement('p',scoreContainerEl,'No scores to display')
         
-}
-else {
-    for (let i=0;i<highScores.length;i++){
-        addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
+    }
+    else {
+        for (let i=0;i<highScores.length;i++){
+            addElement('p',scoreContainerEl,highScores[i].name + ':' + highScores[i].score)
         }
     }
     addElement('button',mainEl,'Go Back',showMainPage)
@@ -131,29 +128,28 @@ function showResult(result){
 // Checks if answer is correct and removes 15 seconds for a wrong answer
 function checkAnswer(){
     let result;
-    // if(this.textContent === questionPool[questionIndex][5]){
-        if(this.textContent === currentQuestionAndAnswer[5]){
+    if(this.textContent === currentQuestionAndAnswer[5]){
         result = 'Correct';
         correctAnswers++;
-    }else{
+    }
+    else {
         result = 'WRONG!';
-        if (gameTime <= 15){
+        if (gameTime <= 15) {
             gameTime = 0;
             showResult(result)
             endGame()
             return
-        }else{
+        }
+        else {
             gameTime-=15;
         }
         timeCounter.textContent = 'Time: ' + gameTime;
     }
     showResult(result)
     questionIndex++;
-    // console.log(gameTime,'inside answer' )
 
-    // Will update quiz board if there are questions left or end game if that was the last question
-    // if (questionIndex<questionPool.length){  
-        if (currentQuestionPool.length){       
+    // Will update quiz board if there are questions left or end game if that was the last question 
+    if (currentQuestionPool.length){       
         updateQuizBoard()
     }
     else {
@@ -180,13 +176,8 @@ function updateQuizBoard(){
 // Clears the page of all elements
 function clearQuizBoard(){
     removeElement(titleEl)
-    // removeElement(mainList)
     removeElement(mainEl)
-    // removeElement(footerEl)
     removeElement(scoreContainerEl)
-    // if (resultTimer){
-    //     clearTimeout(resultTimer)
-    // }
     questionIndex=0;
 }
 
@@ -194,13 +185,11 @@ function clearQuizBoard(){
 function quizStart() {
     // Resets game timer
     gameTime = 75;
-    
     timer =  setInterval(function(){
         timeCounter.textContent = 'Time: ' + gameTime;
-        // console.log(gameTime)
+       
         // Removes timer when time runs out
         if (gameTime <= 0){
-            
             clearInterval(timer)
             timer=null;
             endGame()
@@ -226,7 +215,7 @@ function makeQuizBoard() {
 function showMainPage() {
     clearQuizBoard()
     addElement('h1',mainEl,'Code Quiz Challenge')
-    addElement('p',mainEl,'dsfdfsdfsdfsdfsdfsdfsdf')
+    addElement('p',mainEl,'Answer the following questions to help practice for your coding interview.  Try to answer as fast as your can to get a higher score, but remember your time will be reduced by fifteen seconds for a wrong answer.')
     addElement('button',mainEl,'Start Quiz',makeQuizBoard)
     currentQuestionPool = [...questionPool]
     timeCounter.textContent = '';

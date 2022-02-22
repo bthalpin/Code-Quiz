@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 
+/* Main navigation styling */
 .main-nav{
     display:flex;
     justify-content: space-between;
@@ -11,6 +12,7 @@
     padding:1rem;
 }
 
+/* Styling for the link for the high score page */
 .high-score{
     color: rgb(84, 18, 145);
     font-weight:bold;
@@ -23,37 +25,34 @@
     transform:scale(1.05);
 }
 
-h1{
-    font-size: 2rem;
-}
-
+/* Sets size of main card */
 .main-board{
     margin:auto;
-    /* padding:0rem; */
+    padding-top:1rem;
     width:400px;
     text-align: center;
 }
 
 
-.mainboard h2,.main-board p,.main-board h3{
-    margin:2rem;
+.main-board h1,.main-board h2,.main-board h3,.main-board p{
+    margin:1.5rem;
 }
 
+h1{
+    font-size: 2rem;
+}
+
+/* Style for high score board */
 .score-container>p{
-    background-color: rgb(148, 127, 168);
+    background-color: rgb(197, 175, 218);
     margin:1rem auto;
-    border-radius: 2rem;
     padding:0.5rem;
     width: fit-content;
     min-width: 200px;
     text-align: center;
-
 }
 
-.answer-container{
-    margin:auto;
-}
-
+/* Style for buttons and answers */
 button,li{
     background-color: rgb(84, 18, 145);
     color:rgb(206, 206, 206);
@@ -68,11 +67,13 @@ button:hover,li:hover{
     cursor: pointer;
 }
 
+/* Ensures the numbers and content are inside the background */
 li{
     list-style-position: inside;
     width:fit-content;
 }
 
+/* Style for the Correct or Wrong pop up */
 .result>p{
     margin-top:1rem;
     color:rgb(153, 153, 153);
@@ -80,11 +81,13 @@ li{
     border-top:1px solid rgb(153, 153, 153);
 }
 
+/* Style for scoreboard input field */
 input{
     width:100%;
     max-width: 400px;
 }
 
+/* Better layout for smaller screens */
 @media screen and (max-width:500px) {
     .main-board{
         width: 100%;
