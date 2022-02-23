@@ -77,6 +77,10 @@ function clearScores() {
 
 // Displays the high scores on the screen if there are any
 function showHighScore() {
+    if (timer){
+        clearInterval(timer)
+        timer=null;
+    }
     clearQuizBoard()
     timeCounter.textContent = '';
     if (!highScores || !highScores.length){
