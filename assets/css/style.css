@@ -73,6 +73,12 @@ li{
     width:fit-content;
 }
 
+/* Style for scoreboard input field */
+input{
+    width:100%;
+    max-width: 400px;
+}
+
 /* Style for the Correct or Wrong pop up */
 .result>p{
     margin-top:1rem;
@@ -81,18 +87,17 @@ li{
     border-top:1px solid rgb(153, 153, 153);
 }
 
-/* Style for scoreboard input field */
-input{
-    width:100%;
-    max-width: 400px;
-}
-
 /* Better layout for smaller screens */
 @media screen and (max-width:500px) {
     .main-board{
         width: 100%;
         padding:0rem 1rem;
     }
+    
+    .score-container>p{
+        min-width: none;
+    }
+
     ::placeholder{
         font-size: 0.8rem;
     }

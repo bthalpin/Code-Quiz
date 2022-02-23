@@ -6,20 +6,19 @@ const highScoreEl = document.querySelector('.high-score');
 const scoreContainerEl = document.querySelector('.score-container');
 let mainList;
 
-let correctAnswers = 0;
 let highScores = [];
 let gameTime;
 let timer;
 let resultTimer;
 let currentQuestionAndAnswer;
+let questionIndex = 0;
 
 // Pool of questions
-let questionIndex = 0;
-const questionPool = [['Common used data types DO NOT inclue: ','a2','a3','a4','a5','a2'],
-                    ['q2','asd2','aasd3','adh4','ahgk5','ahgk5'],
-                    ['q3','azx2','afd3','ea4','ay5','ea4'],
-                    ['q4','az2','xa3','acv4','amvb5','acv4'],
-                    ['q5','aq2','aw3','ae4','ra5','ra5']]
+const questionPool = [['Which HTML tag is used to enclose javascript? ','<html>','<link>','<script>','<head>','<script>'],
+                    ['Which of the following is NOT a primitive data type in JavaScript? ','Variable','Number','Undefined','Boolean','Variable'],
+                    ['What is the function of the pop() method? ','Remove first element of an array','Delete an entire array','pop() is not a method in JavaScript','Remove the last element of an array','Remove the last element of an array'],
+                    ['Which of the following is not like the others? ','variable++','variable += 1','variable ^= 1','variable = variable + 1','variable ^= 1'],
+                    ['What is the range of Math.random()? ','0 to just less than 1','Any range you select','0 to 1, including 1','0 to 10, not including 10','0 to just less than 1']]
 
 // Copies array to keep original array intact to allow the game to be played again
 let currentQuestionPool = [...questionPool]
@@ -79,6 +78,7 @@ function clearScores() {
 // Displays the high scores on the screen if there are any
 function showHighScore() {
     clearQuizBoard()
+    timeCounter.textContent = '';
     if (!highScores || !highScores.length){
         addElement('p',scoreContainerEl,'No scores to display')
         
@@ -130,10 +130,11 @@ function checkAnswer(){
     let result;
     if(this.textContent === currentQuestionAndAnswer[5]){
         result = 'Correct';
-        correctAnswers++;
     }
     else {
         result = 'WRONG!';
+
+        // Ends game if wrong answer penalty causes time to run out
         if (gameTime <= 15) {
             gameTime = 0;
             showResult(result)
@@ -148,7 +149,7 @@ function checkAnswer(){
     showResult(result)
     questionIndex++;
 
-    // Will update quiz board if there are questions left or end game if that was the last question 
+    // Will update quiz board if there are questions left or ends game if that was the last question 
     if (currentQuestionPool.length){       
         updateQuizBoard()
     }
