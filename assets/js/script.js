@@ -95,6 +95,11 @@ function showHighScore() {
 // Loads the high scores from local storage
 function loadScores() {
     highScores = JSON.parse(localStorage.getItem('highScores'))
+
+    // Sets high scores to empty array if there are no scores in local storage
+    if (!highScores){
+        highScores = []
+    }
 }
 
 // Saves high scores to local storage
