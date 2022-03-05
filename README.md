@@ -17,3 +17,10 @@ This is the quiz in progress:
 
 The following image shows the score board:
 !['Score board with a list of names and their score.  There is a button to go back and to clear the score.](./assets/images/score-board.png)
+
+
+## License 
+
+Copyright 2022 [Brian Halpin](mailto:brian.t.halpin@gmail.com)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
